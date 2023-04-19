@@ -25,15 +25,36 @@ public class Sudoku {
             int col = i % 9;
             Feldgruppe zeile = this.zeilen[row];
             Feldgruppe spalte = this.spalten[col];
-            Feldgruppe quadrant = this.quadranten[(row / 3) * 3 + (col / 3)];
+            Feldgruppe quadrant = this.quadranten[this.getQuadrant(row, col)];
 			zeile.setFeld(col, feld);
 			spalte.setFeld(row, feld);  
-            quadrant.setFeld(row % 3 * 3 + col % 3, feld);
+            quadrant.setFeld(this.getQuadrantIndex(row, col), feld);
             feld.init(zeile, spalte, quadrant);
 		}
 	}
 	
+	public void validateLayout() {
+		for(int i = 0; i < 81; ++i) {
+			int row = i / 9;
+            int col = i % 9;
+            Feld f = this.spalten[col].getFeld(row);
+            assert this.spalten[col].getFeld(row) == f;
+            assert this.zeilen[row].getFeld(col) != f;
+            assert this.quadranten[this.getQuadrant(row, col)].getFeld(this.getQuadrantIndex(row, col)) == f;
+		}
+	}
+	
+	private void ausgebenSeperator() {
+		for(int i = 0; i < 9; i++) {
+			System.out.print("+  ");
+			// schreibe einen block an abstandszeichen
+			for(int j = 0; j < 9; j++) System.out.print("-  ");     
+		}
+		System.out.println("+");
+	}
+	
 	public void ausgeben() {
+		ausgebenSeperator();
 		for(Feldgruppe gruppe : this.zeilen) {
 			for(int i = 0; i < 9; ++i) {
 				int wert = gruppe.getFeld(i).getWert();
@@ -47,9 +68,17 @@ public class Sudoku {
 		if(zeile > this.zeilen.length || spalte > this.spalten.length) return false;
 		if(this.zeilen[zeile].istVorhanden(wert)) return false;
 		if(this.spalten[spalte].istVorhanden(wert)) return false;
-		if(this.quadranten[(zeile / 3) * 3 + (spalte / 3)].istVorhanden(wert)) return false;
+		if(this.quadranten[this.getQuadrant(zeile, spalte)].istVorhanden(wert)) return false;
 		this.zeilen[zeile].getFeld(spalte).setWert(wert);
 		return true;
+	}
+	
+	private int getQuadrantIndex(int zeile, int spalte) {
+		return zeile % 3 * 3 + spalte % 3;
+	}
+	
+	private int getQuadrant(int zeile, int spalte) {
+		return (zeile / 3) * 3 + (spalte / 3);
 	}
 	
 	private boolean istKoordinate(int zeile, int spalte) {
