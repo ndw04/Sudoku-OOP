@@ -39,29 +39,33 @@ public class Sudoku {
             int col = i % 9;
             Feld f = this.spalten[col].getFeld(row);
             assert this.spalten[col].getFeld(row) == f;
-            assert this.zeilen[row].getFeld(col) != f;
+            assert this.zeilen[row].getFeld(col) == f;
             assert this.quadranten[this.getQuadrant(row, col)].getFeld(this.getQuadrantIndex(row, col)) == f;
 		}
 	}
 	
 	private void ausgebenSeperator() {
-		for(int i = 0; i < 9; i++) {
-			System.out.print("+  ");
+		for(int i = 0; i < 3; i++) {
+			System.out.print("+ ");
 			// schreibe einen block an abstandszeichen
-			for(int j = 0; j < 9; j++) System.out.print("-  ");     
+			for(int j = 0; j < 3; j++) System.out.print("- ");     
 		}
 		System.out.println("+");
 	}
 	
 	public void ausgeben() {
-		ausgebenSeperator();
-		for(Feldgruppe gruppe : this.zeilen) {
+		for(int j = 0; j < 9; ++j) {
+			Feldgruppe gruppe = this.zeilen[j];
+			if(j % 3 == 0) ausgebenSeperator();
 			for(int i = 0; i < 9; ++i) {
+				if(i == 0) System.out.print("| ");
+				else if(i % 3 == 0) System.out.print("| ");
 				int wert = gruppe.getFeld(i).getWert();
 				System.out.print(wert == -1 ? ". " : wert + " ");
 			}
-			System.out.println("");
+			System.out.println("|");
 		}
+		ausgebenSeperator();
 	}
 	
 	public boolean setWert(int zeile, int spalte, int wert) {
