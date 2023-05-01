@@ -6,11 +6,11 @@ public class Feld {
 	private Feldgruppe spalte;
 	private Feldgruppe quadrant;
 	
-	public void init(Feldgruppe neueZeile, Feldgruppe neueSpalte, Feldgruppe neuerQuadrant) {
-		this.zeile = neueZeile;
-		this.spalte = neueSpalte;
-		this.quadrant = neuerQuadrant;
-		this.wert = -1; // default
+	public Feld(Feldgruppe zeile, Feldgruppe spalte, Feldgruppe quadrant) {
+		this.zeile = zeile;
+		this.spalte = spalte;
+		this.quadrant = quadrant;
+		this.wert = -1;
 	}
 	
 	public int getWert() {
