@@ -4,16 +4,14 @@ public class Feldgruppe {
 	private int nr;
 	private Feld[] felder;
 	
-	public void init() {
+	public Feldgruppe() {
 		this.felder = new Feld[9];
 	}
 	
-	// ???
 	public int getNr() {
 		return this.nr;
 	}
 	
-	// ???
 	public void setNr(int neueNr) {
 		this.nr = neueNr;
 	}
